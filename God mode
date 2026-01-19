@@ -1,0 +1,163 @@
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local KeyFrame = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
+local KeyInput = Instance.new("TextBox")
+local EnterBtn = Instance.new("TextButton")
+local ContentFrame = Instance.new("Frame")
+local GodBtn = Instance.new("TextButton")
+local NoclipBtn = Instance.new("TextButton")
+local UICorner = Instance.new("UICorner")
+
+-- Thiết lập ScreenGui
+ScreenGui.Name = "ThuyTienPremium"
+ScreenGui.Parent = game:GetService("CoreGui")
+ScreenGui.ResetOnSpawn = false
+
+-- Khung chính
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+MainFrame.Position = UDim2.new(0.5, -125, 0.5, -100)
+MainFrame.Size = UDim2.new(0, 250, 0, 200)
+MainFrame.Active = true
+MainFrame.Draggable = true -- Có thể kéo di chuyển
+
+local MainCorner = Instance.new("UICorner", MainFrame)
+MainCorner.CornerRadius = UDim.new(0, 15)
+
+-- Tiêu đề chữ chạy 7 màu (RGB)
+Title.Name = "Title"
+Title.Parent = MainFrame
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.BackgroundTransparency = 1
+Title.Font = Enum.Font.GothamBold
+Title.Text = "Thuy Tien Premium"
+Title.TextSize = 20
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+spawn(function()
+    while task.wait() do
+        local hue = tick() % 5 / 5
+        Title.TextColor3 = Color3.fromHSV(hue, 1, 1)
+    end
+end)
+
+-- KHUNG NHẬP KEY
+KeyFrame.Name = "KeyFrame"
+KeyFrame.Parent = MainFrame
+KeyFrame.Size = UDim2.new(1, 0, 0.8, 0)
+KeyFrame.Position = UDim2.new(0, 0, 0.2, 0)
+KeyFrame.BackgroundTransparency = 1
+
+KeyInput.Parent = KeyFrame
+KeyInput.Size = UDim2.new(0.8, 0, 0, 35)
+KeyInput.Position = UDim2.new(0.1, 0, 0.2, 0)
+KeyInput.PlaceholderText = "Nhập Key tại đây..."
+KeyInput.Text = ""
+KeyInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", KeyInput)
+
+EnterBtn.Parent = KeyFrame
+EnterBtn.Size = UDim2.new(0.6, 0, 0, 35)
+EnterBtn.Position = UDim2.new(0.2, 0, 0.5, 0)
+EnterBtn.Text = "Xác Nhận"
+EnterBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+EnterBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", EnterBtn)
+
+-- KHUNG TÍNH NĂNG (Ẩn lúc đầu)
+ContentFrame.Name = "ContentFrame"
+ContentFrame.Parent = MainFrame
+ContentFrame.Size = UDim2.new(1, 0, 0.8, 0)
+ContentFrame.Position = UDim2.new(0, 0, 0.2, 0)
+ContentFrame.BackgroundTransparency = 1
+ContentFrame.Visible = false
+
+GodBtn.Parent = ContentFrame
+GodBtn.Size = UDim2.new(0.8, 0, 0, 40)
+GodBtn.Position = UDim2.new(0.1, 0, 0.1, 0)
+GodBtn.Text = "God Mode: OFF"
+GodBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+GodBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", GodBtn)
+
+NoclipBtn.Parent = ContentFrame
+NoclipBtn.Size = UDim2.new(0.8, 0, 0, 40)
+NoclipBtn.Position = UDim2.new(0.1, 0, 0.45, 0)
+NoclipBtn.Text = "Noclip: OFF"
+NoclipBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+NoclipBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", NoclipBtn)
+
+-----------------------------------------------------------
+-- LOGIC XỬ LÝ
+-----------------------------------------------------------
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local player = game.Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local godActive = false
+local noclipActive = false
+local keyPassed = false
+
+-- Kiểm tra Key
+EnterBtn.MouseButton1Click:Connect(function()
+    if KeyInput.Text == "thuytien" then
+        keyPassed = true
+        KeyFrame.Visible = false
+        ContentFrame.Visible = true
+        Title.Text = "Thuy Tien Premium - Access"
+    else
+        KeyInput.Text = ""
+        KeyInput.PlaceholderText = "Sai Key rồi!"
+    end
+end)
+
+-- Đóng/Mở Menu bằng phím T
+UserInputService.InputBegan:Connect(function(input, gpe)
+    if gpe then return end
+    if input.KeyCode == Enum.KeyCode.T and keyPassed then
+        MainFrame.Visible = not MainFrame.Visible
+    end
+end)
+
+-- God Mode Logic
+GodBtn.MouseButton1Click:Connect(function()
+    godActive = not godActive
+    local hum = char:FindFirstChildOfClass("Humanoid")
+    if godActive then
+        hum.MaxHealth = math.huge
+        hum.Health = math.huge
+        GodBtn.Text = "God Mode: ON"
+        GodBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+    else
+        hum.MaxHealth = 100
+        hum.Health = 100
+        GodBtn.Text = "God Mode: OFF"
+        GodBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    end
+end)
+
+-- Noclip Logic
+NoclipBtn.MouseButton1Click:Connect(function()
+    noclipActive = not noclipActive
+    if noclipActive then
+        NoclipBtn.Text = "Noclip: ON"
+        NoclipBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+    else
+        NoclipBtn.Text = "Noclip: OFF"
+        NoclipBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    end
+end)
+
+RunService.Stepped:Connect(function()
+    if noclipActive then
+        for _, part in pairs(char:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = false
+            end
+        end
+    end
+end)
