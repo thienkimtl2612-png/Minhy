@@ -1,0 +1,31 @@
+-- ==========================================
+-- SCRIPT: Thuy Tien Premium (Hello Kitty Edition)
+-- ==========================================
+
+-- 1. Hiển thị thông báo với hình Hello Kitty
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "Thuy Tien Premium";
+    Text = "Hello Kitty đang tải script cho bạn... <3";
+    Icon = "rbxassetid://12341221251"; -- ID hình ảnh Hello Kitty dễ thương
+    Duration = 7;
+})
+
+-- 2. Hiệu ứng âm thanh nhẹ khi mở (Tùy chọn)
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://130723915" -- Âm thanh "Ting" nhẹ
+sound.Parent = game:GetService("SoundService")
+sound:Play()
+
+-- 3. In thông báo ra Console
+print("--------------------------------------")
+print("Thuy Tien Premium - Hello Kitty Version")
+print("--------------------------------------")
+
+-- 4. Khởi chạy script gốc
+local success, err = pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/trungdao2k4/trauroblox/refs/heads/main/traurobloxv5.lua"))()
+end)
+
+if not success then
+    warn("Lỗi: Không thể kết nối Thuy Tien Premium!")
+end
