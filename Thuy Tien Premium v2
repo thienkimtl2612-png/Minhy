@@ -1,0 +1,27 @@
+-- Cấu hình thông tin
+local my_image = "rbxassetid://75323564064473"
+local my_title = "Thuy Tien Premium"
+local my_message = "Hoang Minh Love Thuy Tien"
+
+-- Hiển thị thông báo ở góc phải màn hình
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "Thông Báo";
+    Text = my_message;
+    Duration = 10; -- Hiển thị trong 10 giây
+})
+
+-- Tải và chỉnh sửa script gốc
+local success, content = pcall(game.HttpGet, game, "https://raw.githubusercontent.com/trungdao2k4/trauroblox/refs/heads/main/traurobloxv5.lua")
+
+if success then
+    -- Đổi tên tiêu đề menu
+    content = content:gsub("Trâu Roblox V5", my_title)
+    
+    -- Đổi hình nền/icon
+    content = content:gsub("rbxassetid://%d+", my_image)
+    
+    -- Chạy script
+    loadstring(content)()
+else
+    warn("Lỗi kết nối, không thể tải Script!")
+end
