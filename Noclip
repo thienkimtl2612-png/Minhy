@@ -1,0 +1,86 @@
+--[[
+    SCRIPT: THUY TIEN PREMIUM (FLY & NOCLIP)
+    COMPATIBILITY: DELTA, HYDROGEN, FLUXUS, ETC.
+]]
+
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
+local FlyBtn = Instance.new("TextButton")
+local NoclipBtn = Instance.new("TextButton")
+
+-- Cấu hình Giao diện (UI)
+ScreenGui.Parent = game:GetService("CoreGui")
+MainFrame.Name = "ThuyTienMenu"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+MainFrame.Position = UDim2.new(0.1, 0, 0.1, 0)
+MainFrame.Size = UDim2.new(0, 150, 0, 180)
+MainFrame.Active = true
+MainFrame.Draggable = true -- Có thể kéo di chuyển trên màn hình
+
+Title.Parent = MainFrame
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.Text = "Thuy Tien Premium"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+
+-- Nút Fly
+FlyBtn.Parent = MainFrame
+FlyBtn.Position = UDim2.new(0.1, 0, 0.25, 0)
+FlyBtn.Size = UDim2.new(0.8, 0, 0, 35)
+FlyBtn.Text = "Fly: OFF"
+FlyBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+FlyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- Nút Noclip
+NoclipBtn.Parent = MainFrame
+NoclipBtn.Position = UDim2.new(0.1, 0, 0.55, 0)
+NoclipBtn.Size = UDim2.new(0.8, 0, 0, 35)
+NoclipBtn.Text = "Noclip: OFF"
+NoclipBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+NoclipBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- BIẾN ĐIỀU KHIỂN
+local flying = false
+local noclip = false
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+-- CHỨC NĂNG NOCLIP
+game:GetService("RunService").Stepped:Connect(function()
+    if noclip then
+        for _, v in pairs(character:GetDescendants()) do
+            if v:IsA("BasePart") then
+                v.CanCollide = false
+            end
+        end
+    end
+end)
+
+NoclipBtn.MouseButton1Click:Connect(function()
+    noclip = not noclip
+    NoclipBtn.Text = noclip and "Noclip: ON" or "Noclip: OFF"
+    NoclipBtn.BackgroundColor3 = noclip and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(60, 60, 60)
+end)
+
+-- CHỨC NĂNG FLY (Dành cho Mobile/Delta)
+FlyBtn.MouseButton1Click:Connect(function()
+    flying = not flying
+    FlyBtn.Text = flying and "Fly: ON" or "Fly: OFF"
+    FlyBtn.BackgroundColor3 = flying and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(60, 60, 60)
+    
+    if flying then
+        local bpos = Instance.new("BodyPosition", character.PrimaryPart)
+        bpos.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+        bpos.Position = character.PrimaryPart.Position
+        
+        task.spawn(function()
+            while flying do
+                bpos.Position = character.PrimaryPart.Position + (workspace.CurrentCamera.CFrame.LookVector * 5)
+                task.wait()
+            end
+            bpos:Destroy()
+        end)
+    end
+end)
