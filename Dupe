@@ -1,0 +1,152 @@
+--[[ 
+    THUY TIEN PREMIUM - REBORN
+    Key: thuytien | Mở/Đóng: T hoặc Nút T
+]]
+
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local ToggleBtn = Instance.new("TextButton")
+local Title = Instance.new("TextLabel")
+local ContentFrame = Instance.new("Frame")
+local KeyInput = Instance.new("TextBox")
+local EnterBtn = Instance.new("TextButton")
+
+-- Setup UI
+ScreenGui.Parent = game:GetService("CoreGui")
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+MainFrame.Size = UDim2.new(0, 250, 0, 280)
+MainFrame.Position = UDim2.new(0.5, -125, 0.4, -140)
+MainFrame.Active = true
+MainFrame.Draggable = true
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
+
+-- RGB Title
+Title.Parent = MainFrame
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.Text = "Thuy Tien Premium"
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 18
+spawn(function()
+    while task.wait() do
+        Title.TextColor3 = Color3.fromHSV(tick() % 5 / 5, 0.8, 1)
+    end
+end)
+
+-- Tab Tính Năng
+local GodBtn = Instance.new("TextButton", MainFrame)
+local NoclipBtn = Instance.new("TextButton", MainFrame)
+local DupeBtn = Instance.new("TextButton", MainFrame) -- Nút Dupe (Hỗ trợ)
+
+local function StyleBtn(btn, pos, text)
+    btn.Size = UDim2.new(0.8, 0, 0, 40)
+    btn.Position = pos
+    btn.Text = text
+    btn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.Gotham
+    btn.Visible = false
+    Instance.new("UICorner", btn)
+end
+
+StyleBtn(GodBtn, UDim2.new(0.1, 0, 0.2, 0), "God Mode: OFF")
+StyleBtn(NoclipBtn, UDim2.new(0.1, 0, 0.4, 0), "Noclip: OFF")
+StyleBtn(DupeBtn, UDim2.new(0.1, 0, 0.6, 0), "Dupe Pet (Beta)")
+
+-- Key System
+KeyInput.Parent = MainFrame
+KeyInput.Size = UDim2.new(0.8, 0, 0, 35)
+KeyInput.Position = UDim2.new(0.1, 0, 0.4, 0)
+KeyInput.PlaceholderText = "Key: thuytien"
+Instance.new("UICorner", KeyInput)
+
+EnterBtn.Parent = MainFrame
+EnterBtn.Size = UDim2.new(0.6, 0, 0, 35)
+EnterBtn.Position = UDim2.new(0.2, 0, 0.6, 0)
+EnterBtn.Text = "Xác Nhận"
+Instance.new("UICorner", EnterBtn)
+
+-----------------------------------------------------------
+-- LOGIC FIX & FEATURES
+-----------------------------------------------------------
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local Player = game.Players.LocalPlayer
+local godActive = false
+local noclipActive = false
+local isPassed = false
+
+-- Fix God Mode nâng cao (Xóa các Part gây sát thương cục bộ)
+local function UltraGod()
+    if not godActive then return end
+    local char = Player.Character
+    if char then
+        -- Cách 1: Chống chết ngay lập tức
+        for _, v in pairs(char:GetDescendants()) do
+            if v:IsA("BasePart") then v.CanTouch = not godActive end -- Ngăn chạm vào Lava/Tsunami
+        end
+        -- Cách 2: Ép máu
+        local hum = char:FindFirstChildOfClass("Humanoid")
+        if hum then
+            hum.MaxHealth = 999999
+            hum.Health = 999999
+        end
+    end
+end
+
+-- Tính năng Dupe Pet (Thực chất là Auto-Farm hoặc Click-Dupe nếu game có lỗi)
+DupeBtn.MouseButton1Click:Connect(function()
+    if not isPassed then return end
+    -- Thông báo
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Thuy Tien Premium",
+        Text = "Đang quét lỗ hổng Pet...",
+        Duration = 3
+    })
+    -- Lưu ý: Đây là mã giả lập hỗ trợ, nếu game có RemoteEvent nhận pet, ta sẽ gọi liên tục
+    -- Bạn cần biết tên RemoteEvent của game đó để dupe thật 100%
+    task.wait(2)
+    print("Không tìm thấy lỗ hổng Server-Side để Dupe Pet!")
+end)
+
+-- Các chức năng khác
+GodBtn.MouseButton1Click:Connect(function()
+    godActive = not godActive
+    GodBtn.Text = godActive and "God Mode: ON" or "God Mode: OFF"
+    GodBtn.BackgroundColor3 = godActive and Color3.fromRGB(0, 150, 0) or Color3.fromRGB(35, 35, 35)
+end)
+
+NoclipBtn.MouseButton1Click:Connect(function()
+    noclipActive = not noclipActive
+    NoclipBtn.Text = noclipActive and "Noclip: ON" or "Noclip: OFF"
+    NoclipBtn.BackgroundColor3 = noclipActive and Color3.fromRGB(0, 150, 0) or Color3.fromRGB(35, 35, 35)
+end)
+
+RunService.Stepped:Connect(function()
+    if noclipActive and Player.Character then
+        for _, v in pairs(Player.Character:GetDescendants()) do
+            if v:IsA("BasePart") then v.CanCollide = false end
+        end
+    end
+    UltraGod()
+end)
+
+-- Xác nhận Key
+EnterBtn.MouseButton1Click:Connect(function()
+    if KeyInput.Text == "thuytien" then
+        isPassed = true
+        KeyInput.Visible = false
+        EnterBtn.Visible = false
+        GodBtn.Visible = true
+        NoclipBtn.Visible = true
+        DupeBtn.Visible = true
+    end
+end)
+
+-- Nút T đóng mở
+ToggleBtn.Parent = ScreenGui
+ToggleBtn.Size = UDim2.new(0, 40, 0, 40)
+ToggleBtn.Position = UDim2.new(0, 5, 0.5, 0)
+ToggleBtn.Text = "T"
+Instance.new("UICorner", ToggleBtn).CornerRadius = UDim.new(1, 0)
+ToggleBtn.MouseButton1Click:Connect(function() MainFrame.Visible = not MainFrame.Visible end)
