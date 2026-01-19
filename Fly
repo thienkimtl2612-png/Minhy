@@ -1,0 +1,156 @@
+--[[
+    SCRIPT: THUY TIEN PREMIUM (KEY SYSTEM + MODERN UI)
+    KEY: thuytien
+]]
+
+local player = game.Players.LocalPlayer
+local flying = false
+local flySpeed = 50
+local keyCorrect = false
+
+-- 1. KHỞI TẠO SCREEN GUI
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "ThuyTienPremium_Final"
+ScreenGui.Parent = game:GetService("CoreGui")
+ScreenGui.ResetOnSpawn = false
+
+-- 2. HỆ THỐNG KIỂM TRA KEY (KEY SYSTEM UI)
+local KeyFrame = Instance.new("Frame")
+KeyFrame.Size = UDim2.new(0, 250, 0, 150)
+KeyFrame.Position = UDim2.new(0.5, -125, 0.5, -75)
+KeyFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+KeyFrame.BorderSizePixel = 0
+KeyFrame.Parent = ScreenGui
+
+local KeyCorner = Instance.new("UICorner")
+KeyCorner.Parent = KeyFrame
+
+local KeyTitle = Instance.new("TextLabel")
+KeyTitle.Size = UDim2.new(1, 0, 0, 40)
+KeyTitle.Text = "NHẬP KEY PREMIUM"
+KeyTitle.TextColor3 = Color3.fromRGB(0, 255, 255)
+KeyTitle.BackgroundTransparency = 1
+KeyTitle.Font = Enum.Font.GothamBold
+KeyTitle.Parent = KeyFrame
+
+local KeyInput = Instance.new("TextBox")
+KeyInput.Size = UDim2.new(0.8, 0, 0, 35)
+KeyInput.Position = UDim2.new(0.1, 0, 0.35, 0)
+KeyInput.PlaceholderText = "Nhập Key tại đây..."
+KeyInput.Text = ""
+KeyInput.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyInput.Parent = KeyFrame
+
+local SubmitBtn = Instance.new("TextButton")
+SubmitBtn.Size = UDim2.new(0.8, 0, 0, 35)
+SubmitBtn.Position = UDim2.new(0.1, 0, 0.65, 0)
+SubmitBtn.Text = "KÍCH HOẠT"
+SubmitBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+SubmitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+SubmitBtn.Font = Enum.Font.GothamBold
+SubmitBtn.Parent = KeyFrame
+
+-- 3. GIAO DIỆN CHÍNH (ẨN LÚC ĐẦU)
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 220, 0, 280)
+MainFrame.Position = UDim2.new(0.5, -110, 0.5, -140)
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+MainFrame.Visible = false
+MainFrame.Active = true
+MainFrame.Draggable = true
+MainFrame.Parent = ScreenGui
+
+local ToggleBtn = Instance.new("TextButton")
+ToggleBtn.Size = UDim2.new(0, 55, 0, 55)
+ToggleBtn.Position = UDim2.new(0.05, 0, 0.4, 0)
+ToggleBtn.Text = "T"
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+ToggleBtn.TextColor3 = Color3.fromRGB(0, 255, 255)
+ToggleBtn.Visible = false
+ToggleBtn.Parent = ScreenGui
+ToggleBtn.Active = true
+ToggleBtn.Draggable = true
+Instance.new("UICorner", ToggleBtn).CornerRadius = UDim.new(1, 0)
+
+-- 4. LOGIC KIỂM TRA KEY
+SubmitBtn.MouseButton1Click:Connect(function()
+    if KeyInput.Text == "thuytien" then
+        keyCorrect = true
+        KeyFrame:Destroy() -- Xóa bảng nhập Key
+        MainFrame.Visible = true
+        ToggleBtn.Visible = true
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Thuy Tien Premium",
+            Text = "Chào mừng bạn đã quay trở lại!",
+            Duration = 5
+        })
+    else
+        KeyInput.Text = ""
+        KeyInput.PlaceholderText = "SAI KEY RỒI!"
+        KeyInput.PlaceholderColor3 = Color3.fromRGB(255, 0, 0)
+    end
+end)
+
+-- 5. CÁC CHỨC NĂNG FLY VÀ UI (GIỮ NGUYÊN NHƯ BẢN TRƯỚC)
+local function startFly()
+    local char = player.Character or player.CharacterAdded:Wait()
+    local root = char:WaitForChild("HumanoidRootPart")
+    local bv = Instance.new("BodyVelocity", root)
+    bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+    local bg = Instance.new("BodyGyro", root)
+    bg.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
+    bg.P = 9e4
+
+    task.spawn(function()
+        while flying and char and char:Parent() do
+            bv.Velocity = workspace.CurrentCamera.CFrame.LookVector * flySpeed
+            bg.CFrame = workspace.CurrentCamera.CFrame
+            task.wait()
+        end
+        bv:Destroy()
+        bg:Destroy()
+    end)
+end
+
+-- (Phần tạo nút Fly/Speed/Noclip tương tự bản trước để đảm bảo mượt mà)
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, 0, 0, 45)
+Title.Text = "THỦY TIÊN PREMIUM"
+Title.TextColor3 = Color3.fromRGB(0, 255, 255)
+Title.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Title.Parent = MainFrame
+
+local function createBtn(text, pos, callback)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0.85, 0, 0, 40)
+    btn.Position = pos
+    btn.Text = text
+    btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    btn.TextColor3 = Color3.fromRGB(200, 200, 200)
+    btn.Parent = MainFrame
+    Instance.new("UICorner", btn)
+    btn.MouseButton1Click:Connect(callback)
+    return btn
+end
+
+local fBtn = createBtn("FLY: OFF", UDim2.new(0.075, 0, 0.25, 0), function()
+    flying = not flying
+    if flying then
+        _G.realBtn.Text = "FLY: ON"; _G.realBtn.TextColor3 = Color3.fromRGB(0, 255, 127); startFly()
+    else
+        _G.realBtn.Text = "FLY: OFF"; _G.realBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
+    end
+end)
+_G.realBtn = fBtn
+
+createBtn("SPEED +", UDim2.new(0.075, 0, 0.45, 0), function() flySpeed = flySpeed + 25 end)
+createBtn("SPEED -", UDim2.new(0.075, 0, 0.65, 0), function() if flySpeed > 25 then flySpeed = flySpeed - 25 end end)
+
+ToggleBtn.MouseButton1Click:Connect(function() MainFrame.Visible = not MainFrame.Visible end)
+player.CharacterAdded:Connect(function() task.wait(1) if flying then startFly() end end)
+game:GetService("RunService").Stepped:Connect(function()
+    if flying and player.Character then
+        for _, v in pairs(player.Character:GetDescendants()) do if v:IsA("BasePart") then v.CanCollide = false end end
+    end
+end)
