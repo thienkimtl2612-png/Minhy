@@ -1,0 +1,23 @@
+-- THUY TIEN PREMIUM LOADER (UI REPLACEMENT)
+
+-- 1. Tải nội dung script gốc về dưới dạng văn bản
+local originalCode = game:HttpGet("https://raw.githubusercontent.com/trungdao2k4/trauroblox/refs/heads/main/traurobloxv5.lua")
+
+-- 2. Tiến hành thay thế tên hiển thị (Sửa tiêu đề trên menu)
+local modifiedCode = originalCode:gsub("Trẩu Roblox V5", "Thuy Tien Premium")
+modifiedCode = modifiedCode:gsub("trauroblox", "Thuy Tien") -- Đổi thêm các dòng chú thích nếu có
+
+-- 3. Thực thi đoạn mã đã được chỉnh sửa
+local success, err = pcall(function()
+    loadstring(modifiedCode)()
+end)
+
+if success then
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Thuy Tien Premium",
+        Text = "Đã đổi tên và kích hoạt thành công!",
+        Duration = 5
+    })
+else
+    warn("Lỗi khi load script: " .. err)
+end
