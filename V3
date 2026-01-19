@@ -1,0 +1,36 @@
+--[[
+    NAME: THUY TIEN PREMIUM
+    VERSION: 5.0
+    DESCRIPTION: Custom Loader for TrauRobloxV5
+]]
+
+-- 1. Thông báo khởi chạy (Notification)
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "Thuy Tien Premium",
+    Text = "Đang khởi tạo hệ thống... Vui lòng chờ!",
+    Icon = "rbxassetid://4483345998", -- Bạn có thể thay ID icon của mình vào đây
+    Duration = 5
+})
+
+-- 2. Hiệu ứng chữ trong Console (F9)
+print([[ 
+  _______ _                  _______ _                _____                                 
+ |__   __| |                |__   __(_)              |  __ \                                
+    | |  | |__  _   _ _   _     | |   _  ___ _ __    | |__) | __ ___ _ __ ___  _   _ _ __ ___  
+    | |  | '_ \| | | | | | |    | |  | |/ _ \ '_ \   |  ___/ '__/ _ \ '_ ` _ \| | | | '_ ` _ \ 
+    | |  | | | | |_| | |_| |    | |  | |  __/ | | |  | |   | | |  __/ | | | | | |_| | | | | | |
+    |_|  |_| |_|\__,_|\__, |    |_|  |_|\___|_| |_|  |_|   |_|  \___|_| |_| |_|\__,_|_| |_| |_|
+                       __/ |                                                                   
+                      |___/                                                                    
+]])
+warn("Thuy Tien Premium v5 đã sẵn sàng!")
+
+-- 3. Load Script gốc
+task.wait(1) -- Chờ một chút để tạo cảm giác chuyên nghiệp
+loadstring(game:HttpGet("https://raw.githubusercontent.com/trungdao2k4/trauroblox/refs/heads/main/traurobloxv5.lua"))()
+
+-- 4. Thông báo sau khi load xong
+task.spawn(function()
+    task.wait(2)
+    print("[Thuy Tien Premium]: Script đã được tải hoàn tất.")
+end)
