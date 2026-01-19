@@ -1,0 +1,177 @@
+--[[ 
+    THUY TIEN PREMIUM - FINAL VERSION
+    Key: thuytien
+    Mở/Đóng: Nhấn phím T hoặc Click nút chữ [T] trên màn hình
+]]
+
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local ToggleBtn = Instance.new("TextButton") -- Nút tròn chữ T
+local Title = Instance.new("TextLabel")
+local KeyFrame = Instance.new("Frame")
+local KeyInput = Instance.new("TextBox")
+local EnterBtn = Instance.new("TextButton")
+local ContentFrame = Instance.new("Frame")
+local GodBtn = Instance.new("TextButton")
+local NoclipBtn = Instance.new("TextButton")
+
+-- Setup GUI Core
+ScreenGui.Name = "ThuyTienPremium_Final"
+ScreenGui.Parent = game:GetService("CoreGui")
+ScreenGui.ResetOnSpawn = false
+
+-- NÚT "T" ĐÓNG MỞ (TAB TOGGLE)
+ToggleBtn.Name = "ToggleBtn"
+ToggleBtn.Parent = ScreenGui
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+ToggleBtn.Position = UDim2.new(0, 10, 0.5, -20)
+ToggleBtn.Size = UDim2.new(0, 40, 0, 40)
+ToggleBtn.Font = Enum.Font.GothamBold
+ToggleBtn.Text = "T"
+ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleBtn.TextSize = 20
+local BtnCorner = Instance.new("UICorner", ToggleBtn)
+BtnCorner.CornerRadius = UDim.new(1, 0) -- Làm nút tròn
+local BtnStroke = Instance.new("UIStroke", ToggleBtn)
+BtnStroke.Thickness = 2
+BtnStroke.Color = Color3.fromRGB(255, 255, 255)
+
+-- Menu Chính
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+MainFrame.Position = UDim2.new(0.5, -125, 0.4, -100)
+MainFrame.Size = UDim2.new(0, 250, 0, 220)
+MainFrame.Visible = true
+MainFrame.Active = true
+MainFrame.Draggable = true
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 12)
+
+-- Tiêu đề RGB
+Title.Parent = MainFrame
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.BackgroundTransparency = 1
+Title.Font = Enum.Font.GothamBold
+Title.Text = "Thuy Tien Premium"
+Title.TextSize = 18
+spawn(function()
+    while task.wait() do
+        local h = tick() % 5 / 5
+        Title.TextColor3 = Color3.fromHSV(h, 1, 1)
+        BtnStroke.Color = Color3.fromHSV(h, 1, 1) -- Viền nút T cũng đổi màu
+    end
+end)
+
+-- Hệ thống Key
+KeyFrame.Parent = MainFrame
+KeyFrame.Size = UDim2.new(1, 0, 0.8, 0)
+KeyFrame.Position = UDim2.new(0, 0, 0.2, 0)
+KeyFrame.BackgroundTransparency = 1
+
+KeyInput.Parent = KeyFrame
+KeyInput.Size = UDim2.new(0.8, 0, 0, 35)
+KeyInput.Position = UDim2.new(0.1, 0, 0.2, 0)
+KeyInput.PlaceholderText = "Key: thuytien"
+KeyInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", KeyInput)
+
+EnterBtn.Parent = KeyFrame
+EnterBtn.Size = UDim2.new(0.6, 0, 0, 35)
+EnterBtn.Position = UDim2.new(0.2, 0, 0.5, 0)
+EnterBtn.Text = "Xác Nhận"
+EnterBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+EnterBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", EnterBtn)
+
+-- Content Frame
+ContentFrame.Parent = MainFrame
+ContentFrame.Size = UDim2.new(1, 0, 0.8, 0)
+ContentFrame.Position = UDim2.new(0, 0, 0.2, 0)
+ContentFrame.BackgroundTransparency = 1
+ContentFrame.Visible = false
+
+GodBtn.Parent = ContentFrame
+GodBtn.Size = UDim2.new(0.8, 0, 0, 45)
+GodBtn.Position = UDim2.new(0.1, 0, 0.1, 0)
+GodBtn.Text = "God Mode: OFF"
+GodBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+GodBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", GodBtn)
+
+NoclipBtn.Parent = ContentFrame
+NoclipBtn.Size = UDim2.new(0.8, 0, 0, 45)
+NoclipBtn.Position = UDim2.new(0.1, 0, 0.45, 0)
+NoclipBtn.Text = "Noclip: OFF"
+NoclipBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+NoclipBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", NoclipBtn)
+
+-----------------------------------------------------------
+-- LOGIC VẬN HÀNH
+-----------------------------------------------------------
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local Player = game.Players.LocalPlayer
+local godActive = false
+local noclipActive = false
+local isPassed = false
+
+-- Hàm đóng mở Menu
+local function ToggleMenu()
+    MainFrame.Visible = not MainFrame.Visible
+end
+
+ToggleBtn.MouseButton1Click:Connect(ToggleMenu)
+
+UserInputService.InputBegan:Connect(function(input, gpe)
+    if not gpe and input.KeyCode == Enum.KeyCode.T then
+        ToggleMenu()
+    end
+end)
+
+-- Kiểm tra Key
+EnterBtn.MouseButton1Click:Connect(function()
+    if KeyInput.Text == "thuytien" then
+        isPassed = true
+        KeyFrame.Visible = false
+        ContentFrame.Visible = true
+        Title.Text = "THUY TIEN VIP"
+    else
+        KeyInput.Text = "SAI KEY!"
+        task.wait(1)
+        KeyInput.Text = ""
+    end
+end)
+
+-- God Mode & Noclip (Fix 100%)
+RunService.Stepped:Connect(function()
+    if isPassed and Player.Character then
+        -- Xử lý Noclip
+        if noclipActive then
+            for _, v in pairs(Player.Character:GetDescendants()) do
+                if v:IsA("BasePart") then v.CanCollide = false end
+            end
+        end
+        -- Xử lý God Mode
+        if godActive then
+            local hum = Player.Character:FindFirstChildOfClass("Humanoid")
+            if hum then
+                hum.MaxHealth = 9e9
+                hum.Health = 9e9
+            end
+        end
+    end
+end)
+
+GodBtn.MouseButton1Click:Connect(function()
+    godActive = not godActive
+    GodBtn.Text = godActive and "God Mode: ON" or "God Mode: OFF"
+    GodBtn.BackgroundColor3 = godActive and Color3.fromRGB(0, 180, 100) or Color3.fromRGB(45, 45, 45)
+end)
+
+NoclipBtn.MouseButton1Click:Connect(function()
+    noclipActive = not noclipActive
+    NoclipBtn.Text = noclipActive and "Noclip: ON" or "Noclip: OFF"
+    NoclipBtn.BackgroundColor3 = noclipActive and Color3.fromRGB(0, 180, 100) or Color3.fromRGB(45, 45, 45)
+end)
