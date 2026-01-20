@@ -1,0 +1,97 @@
+--[[
+    SCRIPT: THUY TIEN REDZ (FIXED FOR DELTA)
+    MÀU: HỒNG (PINK)
+    TÍNH NĂNG: FULL REDZHUB GỐC
+    KEY: thuytien
+]]
+
+-- 1. KHỞI TẠO THƯ VIỆN SIÊU NHẸ (Dễ chạy trên Delta)
+local RedzLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/RHEZAKUN/Redz-Library/main/Source.lua"))()
+
+-- 2. TẠO CỬA SỔ CHÍNH (MÀU HỒNG)
+local Window = RedzLib:MakeWindow({
+    Title = "Thuy Tien Redz",
+    SubTitle = "Blox Fruits Premium",
+    SaveConfig = true,
+    ConfigFolder = "ThuyTien_Data"
+})
+
+-- Đổi màu chủ đạo sang Hồng (Pink)
+RedzLib:SetTheme("Dark") -- Nền tối cho nổi màu hồng
+
+-- 3. HỆ THỐNG KEY PREMIUM
+local KeyTab = Window:MakeTab({"Nhập Key", "lock"})
+
+KeyTab:AddSection({"--- Xác Thực Premium ---"})
+
+KeyTab:AddTextBox({
+    Name = "Nhập Key tại đây",
+    PlaceholderText = "Mật khẩu là: thuytien",
+    Callback = function(Value)
+        if Value == "thuytien" then
+            RedzLib:Notify({
+                Title = "Thành Công!",
+                Content = "Đang tải 100% tính năng RedzHub...",
+                Duration = 5
+            })
+            
+            -- Đóng menu Key và mở Script gốc
+            task.wait(1)
+            
+            -- LOAD TOÀN BỘ TÍNH NĂNG REDZ GỐC
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/huy384/redzHub/refs/heads/main/redzHub.lua"))()
+            
+            -- Kích hoạt hiệu ứng RGB & Đổi tên (Chạy ngầm)
+            task.spawn(function()
+                while task.wait(1) do
+                    pcall(function()
+                        for _, v in pairs(game:GetService("CoreGui"):GetDescendants()) do
+                            if v:IsA("TextLabel") or v:IsA("TextButton") then
+                                if v.Text:find("Redz") or v.Text:find("redzHub") then
+                                    v.Text = v.Text:gsub("Redz", "Thuy Tien"):gsub("redzHub", "Thuy Tien Redz")
+                                    v.TextColor3 = Color3.fromRGB(255, 105, 180) -- Màu Hồng
+                                end
+                            end
+                        end
+                    end)
+                end
+            end)
+        else
+            RedzLib:Notify({
+                Title = "Sai Key!",
+                Content = "Vui lòng nhập đúng 'thuytien'",
+                Duration = 3
+            })
+        end
+    end
+})
+
+KeyTab:AddButton({
+    Name = "Sao chép Link Admin",
+    Callback = function()
+        setclipboard("https://facebook.com/thuytien.admin")
+    end
+})
+
+-- 4. NÚT NỔI HỒNG (DÀNH RIÊNG CHO DELTA)
+local sg = Instance.new("ScreenGui", game:GetService("CoreGui"))
+local btn = Instance.new("ImageButton", sg)
+local corner = Instance.new("UICorner", btn)
+
+btn.Size = UDim2.new(0, 50, 0, 50)
+btn.Position = UDim2.new(0.12, 0, 0.15, 0)
+btn.BackgroundColor3 = Color3.fromRGB(255, 105, 180) -- Màu hồng
+btn.Image = "rbxassetid://15291242337"
+btn.Draggable = true
+corner.CornerRadius = UDim.new(1, 0)
+
+btn.MouseButton1Click:Connect(function()
+    -- Lệnh đóng mở menu
+    pcall(function()
+        local core = game:GetService("CoreGui")
+        local main = core:FindFirstChild("Redz Library") or core:FindFirstChild("Thuy Tien Redz")
+        if main then main.Enabled = not main.Enabled end
+    end)
+end)
+
+print("Thuy Tien Redz Ready!")
