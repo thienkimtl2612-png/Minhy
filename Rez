@@ -1,0 +1,10 @@
+-- Thuy Tien Rez by Hoàng Minh
+local old_name
+old_name = hookmetamethod(game, "__index", function(self, key)
+    if key == "Name" and self.ClassName == "ScreenGui" and self.Name == "RezHub" then
+        return "Thuy Tien Rez by Hoàng Minh"
+    end
+    return old_name(self, key)
+end)
+
+loadstring(game:HttpGet('https://raw.githubusercontent.com/rezhubz/rez/refs/heads/main/rez.lua'))()
