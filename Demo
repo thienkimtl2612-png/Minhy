@@ -1,0 +1,68 @@
+--[[
+    SCRIPT: THUY TIEN REDZ (KEY SYSTEM)
+    TARGET: loadstring(game:HttpGet("https://raw.githubusercontent.com/huy384/redzHub/refs/heads/main/redzHub.lua"))()
+    KEY: thuytien
+]]
+
+local CorrectKey = "thuytien"
+
+-- 1. Khởi tạo thư viện UI cho bảng nhập Key (Sử dụng Redz Library cho nhẹ)
+local RedzLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/RHEZAKUN/Redz-Library/main/Source.lua"))()
+
+local Window = RedzLib:MakeWindow({
+    Title = "Thuy Tien Redz",
+    SubTitle = "Security System",
+    SaveConfig = false
+})
+
+local Tab = Window:MakeTab({"Key System", "lock"})
+
+Tab:AddSection({"Vui lòng nhập Key Premium"})
+
+-- 2. Ô nhập Key
+Tab:AddTextBox({
+    Name = "Nhập Key tại đây:",
+    PlaceholderText = "Key là: thuytien",
+    Callback = function(Value)
+        if Value == CorrectKey then
+            RedzLib:Notify({
+                Title = "Thành Công!",
+                Content = "Key chính xác, đang tải RedzHub...",
+                Duration = 5
+            })
+            
+            -- Đợi 1 giây rồi xóa UI Key và chạy Script gốc
+            task.wait(1)
+            pcall(function()
+                for _, v in pairs(game:GetService("CoreGui"):GetChildren()) do
+                    if v.Name == "Redz Library" then v:Destroy() end
+                end
+            end)
+
+            -- CHẠY SCRIPT GỐC THEO YÊU CẦU
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/huy384/redzHub/refs/heads/main/redzHub.lua"))()
+        else
+            RedzLib:Notify({
+                Title = "Sai Key!",
+                Content = "Vui lòng kiểm tra lại mật khẩu.",
+                Duration = 3
+            })
+        end
+    end
+})
+
+-- 3. Nút lấy Key
+Tab:AddButton({
+    Name = "Copy Link FB Admin (Lấy Key)",
+    Callback = function()
+        setclipboard("https://facebook.com/thuytien.admin")
+        RedzLib:Notify({
+            Title = "Đã Copy!",
+            Content = "Link đã được lưu vào bộ nhớ tạm.",
+            Duration = 3
+        })
+    end
+})
+
+-- Thông báo cho người dùng Delta
+print("Thuy Tien Redz: Key System Loaded. Key: " .. CorrectKey)
