@@ -1,0 +1,52 @@
+--[[
+    SCRIPT: THUY TIEN REDZ
+    ORIGIN: RedzHub Blox Fruits
+    COLOR: Pink & RGB
+]]
+
+-- 1. CHẠY SCRIPT GỐC
+loadstring(game:HttpGet("https://raw.githubusercontent.com/huy384/redzHub/refs/heads/main/redzHub.lua"))()
+
+-- 2. HỆ THỐNG GHI ĐÈ TÊN & MÀU SẮC (VÁ LỖI CHO DELTA)
+task.spawn(function()
+    local OldName = "Redz Hub"
+    local NewName = "Thuy Tien Redz"
+    local PinkColor = Color3.fromRGB(255, 105, 180) -- Màu hồng thương hiệu
+
+    while task.wait(0.5) do -- Quét mỗi 0.5 giây để tiết kiệm pin/RAM
+        pcall(function()
+            for _, v in pairs(game:GetService("CoreGui"):GetDescendants()) do
+                -- Đổi tên tiêu đề
+                if v:IsA("TextLabel") or v:IsA("TextButton") then
+                    if v.Text:find("Redz") or v.Text:find("redzHub") then
+                        v.Text = v.Text:gsub("Redz Hub", NewName):gsub("redzHub", NewName):gsub("Redz", "Thuy Tien")
+                        
+                        -- Áp dụng RGB cho tiêu đề chính
+                        v.TextColor3 = Color3.fromHSV(tick() % 5 / 5, 0.7, 1)
+                    end
+                end
+
+                -- Đổi màu các khung viền/thanh bar sang màu Hồng
+                if v:IsA("Frame") then
+                    -- Nếu frame có màu đỏ (màu gốc của Redz), đổi sang hồng
+                    if v.BackgroundColor3 == Color3.fromRGB(170, 0, 0) or v.BackgroundColor3 == Color3.fromRGB(255, 0, 0) then
+                        v.BackgroundColor3 = PinkColor
+                    end
+                end
+                
+                -- Đổi màu các đường kẻ (UIStroke)
+                if v:IsA("UIStroke") then
+                    v.Color = PinkColor
+                end
+            end
+        end)
+    end
+end)
+
+-- 3. THÔNG BÁO KHI LOAD XONG
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "Thuy Tien Redz",
+    Text = "Đã đổi tên và vá lỗi thành công!",
+    Duration = 5
+})
+
