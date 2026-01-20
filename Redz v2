@@ -1,0 +1,142 @@
+--[[
+    SCRIPT: THUY TIEN REDZ (FULL FEATURES)
+    GIỮ 100% TÍNH NĂNG CỦA REDZHUB
+    MÀU CHỦ ĐẠO: HỒNG (PINK)
+    KEY PREMIUM: thuytien
+]]
+
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+
+-- [ CẤU HÌNH ] --
+local Config = {
+    Key = "thuytien",
+    Name = "Thuy Tien Redz",
+    PinkColor = Color3.fromRGB(255, 105, 180) -- Màu hồng đậm
+}
+
+-- [ HÀM GHI ĐÈ GIAO DIỆN REDZ ] --
+local function HijackRedzUI()
+    task.spawn(function()
+        while task.wait(0.5) do
+            local colorRGB = Color3.fromHSV(tick() % 5 / 5, 0.6, 1)
+            pcall(function()
+                for _, v in pairs(game:GetService("CoreGui"):GetDescendants()) do
+                    -- Đổi tất cả tiêu đề thành tên Thuy Tien
+                    if v:IsA("TextLabel") or v:IsA("TextButton") then
+                        if v.Text:find("Redz") or v.Text:find("redzHub") then
+                            v.Text = v.Text:gsub("Redz", "Thuy Tien"):gsub("redzHub", "Thuy Tien Redz")
+                            v.TextColor3 = colorRGB -- Chữ chạy màu RGB
+                        end
+                    end
+                    -- Đổi các thanh bar, khung viền sang màu hồng
+                    if v:IsA("Frame") and (v.BackgroundColor3 == Color3.fromRGB(170, 0, 0) or v.Name:find("Bar")) then
+                        v.BackgroundColor3 = Config.PinkColor
+                    end
+                end
+            end)
+        end
+    end)
+end
+
+-- [ HÀM MỞ REDZHUB GỐC ] --
+local function LaunchFullFeatures()
+    -- Hệ thống chống Ban cho Delta
+    pcall(function()
+        local g = getmetatable(game)
+        setreadonly(g, false)
+        local old = g.__index
+        g.__index = newcclosure(function(self, b)
+            if not checkcaller() and (b == "WalkSpeed" or b == "JumpPower") then return 16 end
+            return old(self, b)
+        end)
+    end)
+
+    -- Gọi 100% tính năng của RedzHub (Auto Farm, Sea Event, Raid,...)
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/huy384/redzHub/refs/heads/main/redzHub.lua"))()
+    
+    -- Chạy hàm đè giao diện
+    HijackRedzUI()
+end
+
+-- [ GIAO DIỆN NHẬP KEY PREMIUM ] --
+local Window = Fluent:CreateWindow({
+    Title = Config.Name,
+    SubTitle = "Pink Premium Hub",
+    TabWidth = 160,
+    Size = Vector2.new(580, 460),
+    Acrylic = true,
+    Theme = "Rose", -- Theme hồng của Fluent
+    MinimizeKey = Enum.KeyCode.End
+})
+
+local Tabs = {
+    Key = Window:AddTab({ Title = "Authentication", Icon = "lock" })
+}
+
+Tabs.Key:AddParagraph({
+    Title = "💖 Hệ Thống Thuy Tien Redz",
+    Content = "Hãy nhập Key Premium để kích hoạt toàn bộ tính năng của RedzHub."
+})
+
+Tabs.Key:AddInput("InputKey", {
+    Title = "Nhập Key Premium",
+    Description = "Key là: thuytien",
+    Default = "",
+    Placeholder = "Nhập key tại đây...",
+    Callback = function(Value)
+        if Value:lower() == Config.Key then
+            Fluent:Notify({
+                Title = "Chính Xác!",
+                Content = "Đang mở toàn bộ tính năng RedzHub cho bạn...",
+                Duration = 5
+            })
+            task.wait(1)
+            Window:Destroy() -- Đóng bảng Key
+            LaunchFullFeatures() -- Mở Hub chính
+        end
+    end
+})
+
+-- [ NÚT NỔI HỒNG CHO DELTA ] --
+local ScreenGui = Instance.new("ScreenGui")
+local ImageButton = Instance.new("ImageButton")
+local UICorner = Instance.new("UICorner")
+
+ScreenGui.Name = "ThuyTienButton"
+ScreenGui.Parent = game:GetService("CoreGui")
+ImageButton.Parent = ScreenGui
+ImageButton.Size = UDim2.new(0, 55, 0, 55)
+ImageButton.Position = UDim2.new(0.12, 0, 0.15, 0)
+ImageButton.BackgroundColor3 = Config.PinkColor
+ImageButton.Image = "rbxassetid://15291242337" -- Icon đẹp
+ImageButton.Draggable = true
+UICorner.CornerRadius = UDim.new(1, 0)
+UICorner.Parent = ImageButton
+
+ImageButton.MouseButton1Click:Connect(function()
+    game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.End, false, game)
+end)
+
+-- Tự động lưu Key (Tính năng thêm)
+if readfile and writefile then
+    local fileName = "ThuyTienKey.txt"
+    if isfile(fileName) then
+        local savedKey = readfile(fileName)
+        if savedKey == Config.Key then
+            Fluent:Notify({Title = "Auto Login", Content = "Đã nhận diện Key cũ, đang vào thẳng...", Duration = 3})
+            task.wait(1)
+            Window:Destroy()
+            LaunchFullFeatures()
+        end
+    else
+        -- Lưu key khi nhập đúng
+        task.spawn(function()
+            while task.wait(1) do
+                if not game:GetService("CoreGui"):FindFirstChild(Window.Name) then 
+                    writefile(fileName, Config.Key)
+                    break 
+                end
+            end
+        end)
+    end
+end
