@@ -1,0 +1,24 @@
+-- Script đã được chỉnh sửa tiêu đề UI
+local function renameUI()
+    task.spawn(function()
+        while task.wait(0.5) do
+            -- Tìm kiếm UI của RezHub trong PlayerGui
+            for _, gui in pairs(game:GetService("CoreGui"):GetChildren()) do
+                if gui:IsA("ScreenGui") and (gui.Name == "RezHub" or gui:FindFirstChild("Main")) then
+                    -- Tìm các TextLabel chứa tiêu đề cũ để thay thế
+                    for _, v in pairs(gui:GetDescendants()) do
+                        if v:IsA("TextLabel") and (v.Text == "RezHub" or v.Text:find("Rez")) then
+                            v.Text = "Thuy Tien Rez by Hoàng Minh"
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end
+
+-- Chạy hàm đổi tên
+renameUI()
+
+-- Chạy script gốc
+loadstring(game:HttpGet('https://raw.githubusercontent.com/rezhubz/rez/refs/heads/main/rez.lua'))()
