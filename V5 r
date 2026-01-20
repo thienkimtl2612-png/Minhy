@@ -1,0 +1,226 @@
+--[[
+    SCRIPT: THUY TIEN REDZ
+    ORIGIN: RedzHub (Full Features)
+    KEY PREMIUM: thuytien
+    COLOR: Pink & RGB
+]]
+
+-- [ HÀM HIỆU ỨNG VÀ ĐỔI TÊN ] --
+local function LaunchThuyTienRedz()
+    -- Chạy Script gốc của Redz
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/huy384/redzHub/refs/heads/main/redzHub.lua"))()
+
+    -- Vòng lặp Hijack (Ghi đè tên và màu sắc)
+    task.spawn(function()
+        local PinkColor = Color3.fromRGB(255, 105, 180)
+        while task.wait(0.5) do
+            pcall(function()
+                for _, v in pairs(game:GetService("CoreGui"):GetDescendants()) do
+                    -- Đổi tên thành Thuy Tien Redz
+                    if v:IsA("TextLabel") or v:IsA("TextButton") then
+                        if v.Text:find("Redz") or v.Text:find("redzHub") then
+                            v.Text = v.Text:gsub("Redz Hub", "Thuy Tien Redz"):gsub("redzHub", "Thuy Tien Redz"):gsub("Redz", "Thuy Tien")
+                            -- Chữ chạy màu RGB
+                            v.TextColor3 = Color3.fromHSV(tick() % 5 / 5, 0.7, 1)
+                        end
+                    end
+                    -- Đổi màu khung đỏ sang hồng
+                    if v:IsA("Frame") and (v.BackgroundColor3 == Color3.fromRGB(170, 0, 0) or v.BackgroundColor3 == Color3.fromRGB(255, 0, 0)) then
+                        v.BackgroundColor3 = PinkColor
+                    end
+                    if v:IsA("UIStroke") then
+                        v.Color = PinkColor
+                    end
+                end
+            end)
+        end
+    end)
+end
+
+-- [ GIAO DIỆN NHẬP KEY PREMIUM ] --
+-- Sử dụng thư viện gốc nhẹ nhất để đảm bảo Delta chạy được
+local RedzLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/RHEZAKUN/Redz-Library/main/Source.lua"))()
+
+local KeyWindow = RedzLib:MakeWindow({
+    Title = "Thuy Tien Redz | Authentication",
+    SubTitle = "Nhập Key Premium để tiếp tục",
+    SaveConfig = false
+})
+
+local KeyTab = KeyWindow:MakeTab({"Key Premium", "lock"})
+
+KeyTab:AddSection({"Vui lòng nhập Key 'thuytien'"})
+
+KeyTab:AddTextBox({
+    Name = "Input Key",
+    PlaceholderText = "Mật khẩu...",
+    Callback = function(Value)
+        if Value == "thuytien" then
+            RedzLib:Notify({
+                Title = "Chính Xác!",
+                Content = "Đang mở Thuy Tien Redz (RedzHub Full)...",
+                Duration = 5
+            })
+            task.wait(1)
+            -- Xóa UI Key để tránh rối mắt
+            pcall(function()
+                for _, v in pairs(game:GetService("CoreGui"):GetChildren()) do
+                    if v.Name == "Redz Library" then v:Destroy() end
+                end
+            end)
+            -- Chạy Script chính
+            LaunchThuyTienRedz()
+        else
+            RedzLib:Notify({
+                Title = "Sai Key!",
+                Content = "Vui lòng nhập đúng: thuytien",
+                Duration = 3
+            })
+        end
+    end
+})
+
+KeyTab:AddButton({
+    Name = "Copy Link FB Admin",
+    Callback = function()
+        setclipboard("https://facebook.com/thuytien.admin")
+        RedzLib:Notify({Title = "Đã Copy!", Content = "Link admin đã được lưu.", Duration = 2})
+    end
+})
+
+-- Tạo nút nổi (Floating Button) màu Hồng cho Delta
+local sg = Instance.new("ScreenGui", game:GetService("CoreGui"))
+local btn = Instance.new("ImageButton", sg)
+local corner = Instance.new("UICorner", btn)
+
+btn.Size = UDim2.new(0, 55, 0, 55)
+btn.Position = UDim2.new(0.1, 0, 0.2, 0)
+btn.BackgroundColor3 = Color3.fromRGB(255, 105, 180)
+btn.Image = "rbxassetid://15291242337" -- Icon trái tim
+btn.Draggable = true
+corner.CornerRadius = UDim.new(1, 0)
+
+btn.MouseButton1Click:Connect(function()
+    pcall(function()
+        local core = game:GetService("CoreGui")
+        -- Tìm UI chính của RedzHub để ẩn/hiện
+        for _, v in pairs(core:GetChildren()) do
+            if v.Name == "Redz Library" or v:FindFirstChild("Main") then
+                v.Enabled = not v.Enabled
+            end
+        end
+    end)
+end)
+--[[
+    SCRIPT: THUY TIEN REDZ
+    ORIGIN: RedzHub (Full Features)
+    KEY PREMIUM: thuytien
+    COLOR: Pink & RGB
+]]
+
+-- [ HÀM HIỆU ỨNG VÀ ĐỔI TÊN ] --
+local function LaunchThuyTienRedz()
+    -- Chạy Script gốc của Redz
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/huy384/redzHub/refs/heads/main/redzHub.lua"))()
+
+    -- Vòng lặp Hijack (Ghi đè tên và màu sắc)
+    task.spawn(function()
+        local PinkColor = Color3.fromRGB(255, 105, 180)
+        while task.wait(0.5) do
+            pcall(function()
+                for _, v in pairs(game:GetService("CoreGui"):GetDescendants()) do
+                    -- Đổi tên thành Thuy Tien Redz
+                    if v:IsA("TextLabel") or v:IsA("TextButton") then
+                        if v.Text:find("Redz") or v.Text:find("redzHub") then
+                            v.Text = v.Text:gsub("Redz Hub", "Thuy Tien Redz"):gsub("redzHub", "Thuy Tien Redz"):gsub("Redz", "Thuy Tien")
+                            -- Chữ chạy màu RGB
+                            v.TextColor3 = Color3.fromHSV(tick() % 5 / 5, 0.7, 1)
+                        end
+                    end
+                    -- Đổi màu khung đỏ sang hồng
+                    if v:IsA("Frame") and (v.BackgroundColor3 == Color3.fromRGB(170, 0, 0) or v.BackgroundColor3 == Color3.fromRGB(255, 0, 0)) then
+                        v.BackgroundColor3 = PinkColor
+                    end
+                    if v:IsA("UIStroke") then
+                        v.Color = PinkColor
+                    end
+                end
+            end)
+        end
+    end)
+end
+
+-- [ GIAO DIỆN NHẬP KEY PREMIUM ] --
+-- Sử dụng thư viện gốc nhẹ nhất để đảm bảo Delta chạy được
+local RedzLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/RHEZAKUN/Redz-Library/main/Source.lua"))()
+
+local KeyWindow = RedzLib:MakeWindow({
+    Title = "Thuy Tien Redz | Authentication",
+    SubTitle = "Nhập Key Premium để tiếp tục",
+    SaveConfig = false
+})
+
+local KeyTab = KeyWindow:MakeTab({"Key Premium", "lock"})
+
+KeyTab:AddSection({"Vui lòng nhập Key 'thuytien'"})
+
+KeyTab:AddTextBox({
+    Name = "Input Key",
+    PlaceholderText = "Mật khẩu...",
+    Callback = function(Value)
+        if Value == "thuytien" then
+            RedzLib:Notify({
+                Title = "Chính Xác!",
+                Content = "Đang mở Thuy Tien Redz (RedzHub Full)...",
+                Duration = 5
+            })
+            task.wait(1)
+            -- Xóa UI Key để tránh rối mắt
+            pcall(function()
+                for _, v in pairs(game:GetService("CoreGui"):GetChildren()) do
+                    if v.Name == "Redz Library" then v:Destroy() end
+                end
+            end)
+            -- Chạy Script chính
+            LaunchThuyTienRedz()
+        else
+            RedzLib:Notify({
+                Title = "Sai Key!",
+                Content = "Vui lòng nhập đúng: thuytien",
+                Duration = 3
+            })
+        end
+    end
+})
+
+KeyTab:AddButton({
+    Name = "Copy Link FB Admin",
+    Callback = function()
+        setclipboard("https://facebook.com/thuytien.admin")
+        RedzLib:Notify({Title = "Đã Copy!", Content = "Link admin đã được lưu.", Duration = 2})
+    end
+})
+
+-- Tạo nút nổi (Floating Button) màu Hồng cho Delta
+local sg = Instance.new("ScreenGui", game:GetService("CoreGui"))
+local btn = Instance.new("ImageButton", sg)
+local corner = Instance.new("UICorner", btn)
+
+btn.Size = UDim2.new(0, 55, 0, 55)
+btn.Position = UDim2.new(0.1, 0, 0.2, 0)
+btn.BackgroundColor3 = Color3.fromRGB(255, 105, 180)
+btn.Image = "rbxassetid://15291242337" -- Icon trái tim
+btn.Draggable = true
+corner.CornerRadius = UDim.new(1, 0)
+
+btn.MouseButton1Click:Connect(function()
+    pcall(function()
+        local core = game:GetService("CoreGui")
+        -- Tìm UI chính của RedzHub để ẩn/hiện
+        for _, v in pairs(core:GetChildren()) do
+            if v.Name == "Redz Library" or v:FindFirstChild("Main") then
+                v.Enabled = not v.Enabled
+            end
+        end
+    end)
+end)
