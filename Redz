@@ -1,0 +1,76 @@
+--[[ 
+    MY CUSTOM BLOX FRUIT HUB 
+    Tính năng: Auto Farm, Stats, Teleport
+]]
+
+local RedzLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/RHEZAKUN/Redz-Library/main/Source.lua"))()
+
+local Window = RedzLib:MakeWindow({
+    Title = "Custom Blox Fruits Hub",
+    SubTitle = "by YourName",
+    SaveConfig = true,
+    ConfigFolder = "MyHubConfig"
+})
+
+-- Tạo các Tab chính
+local MainTab = Window:MakeTab({"Main", "home"})
+local TeleportTab = Window:MakeTab({"Teleport", "map"})
+local StatsTab = Window:MakeTab({"Stats", "bar-chart"})
+
+--- [ LOGIC AUTO FARM ] ---
+_G.AutoFarm = false
+
+function checkLevel()
+    local level = game:GetService("Players").LocalPlayer.Data.Level.Value
+    -- Bạn có thể thêm logic chọn bãi quái dựa trên Level ở đây
+    return "Bandit" -- Ví dụ mặc định
+end
+
+MainTab:AddToggle({
+    Name = "Auto Farm Level",
+    Default = false,
+    Callback = function(Value)
+        _G.AutoFarm = Value
+        spawn(function()
+            while _G.AutoFarm do
+                task.wait(0.1)
+                -- Ví dụ: Tìm quái và di chuyển tới đó
+                -- pcall(function() ... end)
+                print("Đang tìm quái: " .. checkLevel())
+            end
+        end)
+    end
+})
+
+--- [ LOGIC DỊCH CHUYỂN ] ---
+TeleportTab:AddButton({
+    Name = "Sea 1 (Thế giới 1)",
+    Callback = function()
+        print("Đang dịch chuyển sang Sea 1...")
+        -- Code dịch chuyển giữa các Sea
+    end
+})
+
+TeleportTab:AddButton({
+    Name = "Sea 2 (Thế giới 2)",
+    Callback = function()
+        print("Đang dịch chuyển sang Sea 2...")
+    end
+})
+
+--- [ TỰ ĐỘNG CỘNG ĐIỂM ] ---
+_G.AutoStats = false
+StatsTab:AddToggle({
+    Name = "Auto Stats Melee",
+    Default = false,
+    Callback = function(Value)
+        _G.AutoStats = Value
+        spawn(function()
+            while _G.AutoStats do
+                task.wait(1)
+                game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Melee", 1)
+            end
+        end)
+    end
+})
+
